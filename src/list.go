@@ -12,11 +12,11 @@ import (
 
 func List(file *os.File, db DB) {
 	app := tview.NewApplication()
-
 	mainView := tview.NewTreeNode("Welcome to Notabena!").SetColor(tcell.ColorMediumPurple)
 	noteTree := tview.NewTreeView().
 		SetRoot(mainView).
 		SetCurrentNode(mainView)
+
 	for _, v := range db.GetNotes() {
 		stringId := strconv.FormatUint(uint64(v.Id), 10)
 		node := tview.NewTreeNode(v.Name + " [grey]#" + stringId + "[white]")
@@ -54,35 +54,17 @@ func List(file *os.File, db DB) {
 		}
 		str, ok := reference.(string)
 		if ok {
-			if strings.HasPrefix(str, "DEL") {
-				// this is a bit of a workaround
-				part := strings.Split(str, "+")[1]
-				num, err := strconv.ParseUint(part, 10, 32)
-				if err != nil {
-					panic(err)
-				}
-				db.DeleteNote(uint32(num))
-				app.Stop()
+			num, err := strconv.ParseUint(strings.Split(str, "+")[1], 10, 32)
+			if err != nil {
+				panic(err)
+			}
+			app.Stop()
+			switch strings.Split(str, "+")[0] {
+			case "DEL":
 				List(file, db)
-			}
-			if strings.HasPrefix(str, "EDT") {
-				// this is a bit of a workaround
-				part := strings.Split(str, "+")[1]
-				num, err := strconv.ParseUint(part, 10, 32)
-				if err != nil {
-					panic(err)
-				}
-				app.Stop()
+			case "EDT":
 				Create(file, db, uint32(num))
-			}
-			if strings.HasPrefix(str, "VWR") {
-				// this is a bit of a workaround
-				part := strings.Split(str, "+")[1]
-				num, err := strconv.ParseUint(part, 10, 32)
-				if err != nil {
-					panic(err)
-				}
-				app.Stop()
+			case "VWR":
 				View(file, db, uint32(num))
 			}
 		} else {
