@@ -19,12 +19,13 @@ func Create(file *os.File, db DB, edit uint32) {
 	if edit != 0 {
 		prevNote = db.GetNote(edit)
 		textArea.SetText(prevNote.Content, false)
+		textArea.SetTitle(prevNote.Name).SetBorder(true)
 	} else {
 		prevNote = Note{
 			Id: 0,
 		}
+		textArea.SetTitle("New note").SetBorder(true)
 	}
-	textArea.SetTitle("New note").SetBorder(true)
 	info := tview.NewTextView().SetText("Press Ctrl+X to save or Ctrl+Q to quit without saving")
 	position := tview.NewTextView().SetDynamicColors(true).SetTextAlign(tview.AlignRight)
 	pages := tview.NewPages()
