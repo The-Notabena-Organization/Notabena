@@ -6,8 +6,8 @@
     - [x] Editing notes
     - [x] Removing notes
   - [ ] Not-so-simple note-taking
-    - [ ] Simple Markdown support
-    - [ ] Colors
+    - [x] Simple Markdown support
+    - [x] Colors
     - [ ] Note tags
     - [ ] Folders
   - [ ] Encrypted notes
