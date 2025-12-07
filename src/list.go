@@ -51,6 +51,7 @@ func List(file *os.File, db DB) {
 		if reference == "NEW" {
 			app.Stop()
 			Create(file, db, 0)
+			return
 		}
 		str, ok := reference.(string)
 		if ok {
@@ -61,6 +62,7 @@ func List(file *os.File, db DB) {
 			app.Stop()
 			switch strings.Split(str, "+")[0] {
 			case "DEL":
+				db.DeleteNote(uint32(num))
 				List(file, db)
 			case "EDT":
 				Create(file, db, uint32(num))
