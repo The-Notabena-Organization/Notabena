@@ -25,7 +25,7 @@ func Create(file *os.File, db DB, edit uint32) {
 		}
 	}
 	textArea.SetTitle("New note").SetBorder(true)
-	info := tview.NewTextView().SetText("Press Ctrl+X to save")
+	info := tview.NewTextView().SetText("Press Ctrl+X to save or Ctrl+Q to quit without saving")
 	position := tview.NewTextView().SetDynamicColors(true).SetTextAlign(tview.AlignRight)
 	pages := tview.NewPages()
 	updateInfo := func() {
@@ -83,6 +83,10 @@ func Create(file *os.File, db DB, edit uint32) {
 				return nil
 			}
 			pages.ShowPage("saved")
+			return nil
+		} else if event.Key() == tcell.KeyCtrlQ {
+			app.Stop()
+			List(file, db)
 			return nil
 		}
 		return event

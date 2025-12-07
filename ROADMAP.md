@@ -1,3 +1,5 @@
+# Notabena roadmap
+
 - [ ] Features
   - [x] Simple note-taking
     - [x] Creating notes
@@ -13,7 +15,7 @@
   - [ ] Private vault: only accessible with PIN
   - [ ] Compatibility on the same device (TUI & GUI) and compatibility cross-device by account
 - [ ] Notabena Protocol
-  	- [ ] Collaboration
-  	- [ ] E2EE inspired by the Signal Protocol
-  	- [ ] `.nb` filetype for saving notes (encrypted)
-  	- [ ] Passkeys & encryption keys
+  - [ ] Collaboration
+  - [ ] E2EE inspired by the Signal Protocol
+  - [ ] `.nb` filetype for saving notes (encrypted)
+  - [ ] Passkeys & encryption keys

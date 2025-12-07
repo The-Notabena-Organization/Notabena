@@ -6,3 +6,7 @@ destroy:
     - out/
     - build/
     - .cache/
+buildCmd:
+  - ~cd src && go build -o=../dist/notabena .
+launchCmd:
+  - ~;;cd src && go run .
