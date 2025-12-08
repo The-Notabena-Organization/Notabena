@@ -138,6 +138,9 @@ WHO CAUSED THIS???? Is this note doomed to live in yellow forever? The quick yel
 			note.Save(file.Name())
 			List(file, db)
 			return nil
+		} else if event.Key() == tcell.KeyEscape {
+			pages.SwitchToPage("main")
+			return nil
 		}
 		return event
 	})
