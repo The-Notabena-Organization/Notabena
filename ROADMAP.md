@@ -8,6 +8,7 @@
   - [ ] Not-so-simple note-taking
     - [x] Simple Markdown support
     - [x] Colors
+    - [ ] Background color for whole note
     - [ ] Note tags
     - [ ] Folders
   - [ ] Encrypted notes

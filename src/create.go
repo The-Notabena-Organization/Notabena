@@ -116,6 +116,17 @@ WHO CAUSED THIS???? Is this note doomed to live in yellow forever? The quick yel
 			return event
 		})
 
+	var newNoteId uint32 = 0
+	var saving bool = false
+	if edit == 0 {
+		notes := []*Note{}
+		sqlscan.Select(context.Background(), db.Db, &notes, "SELECT id FROM saved_notes;")
+		for _, v := range notes {
+			if v.Id >= newNoteId {
+				newNoteId = v.Id + 1
+			}
+		}
+	}
 	saved := tview.NewTextView().SetDynamicColors(true).SetText(`[green]Ready to go!
 [blue]Please give your note a name.`)
 
@@ -131,12 +142,16 @@ WHO CAUSED THIS???? Is this note doomed to live in yellow forever? The quick yel
 			notes := []*Note{}
 			sqlscan.Select(context.Background(), db.Db, &notes, "SELECT id FROM saved_notes;")
 			note := Note{
-				Id:      uint32(len(notes)) + 1,
+				Id:      newNoteId,
 				Name:    titleInput.GetText(),
 				Content: textArea.GetText(),
 				Created: time.Now().Format("2006-01-02 15:04")}
 			note.Save(file.Name())
-			List(file, db)
+			if saving {
+				Create(file, db, newNoteId)
+			} else {
+				List(file, db)
+			}
 			return nil
 		} else if event.Key() == tcell.KeyEscape {
 			pages.SwitchToPage("main")
@@ -163,6 +178,20 @@ WHO CAUSED THIS???? Is this note doomed to live in yellow forever? The quick yel
 				return nil
 			}
 			pages.ShowPage("saved")
+		case tcell.KeyCtrlS:
+			if prevNote.Id != 0 {
+				notes := []*Note{}
+				sqlscan.Select(context.Background(), db.Db, &notes, "SELECT id FROM saved_notes;")
+				note := Note{
+					Id:      prevNote.Id,
+					Name:    prevNote.Name,
+					Content: textArea.GetText(),
+					Created: prevNote.Created}
+				note.Save(file.Name())
+			} else {
+				saving = true
+				pages.ShowPage("saved")
+			}
 		case tcell.KeyCtrlQ:
 			app.Stop()
 			List(file, db)
