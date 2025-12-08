@@ -29,10 +29,16 @@ func Create(file *os.File, db DB, edit uint32) {
 	info := tview.NewTextView().SetText("Press Ctrl+X to save or Ctrl+Q to quit without saving")
 	position := tview.NewTextView().SetDynamicColors(true).SetTextAlign(tview.AlignRight)
 	pages := tview.NewPages()
+	var noteNum uint32
+	if edit != 0 {
+		noteNum = uint32(prevNote.Id)
+	} else {
+		noteNum = uint32(len(db.GetNotes()) + 1)
+	}
 	updateInfo := func() {
 		fromRow, fromColumn, toRow, toColumn := textArea.GetCursor()
 		if fromRow == toRow && fromColumn == toColumn {
-			position.SetText(fmt.Sprintf("Note [yellow]#%d[white], Row: [yellow]%d[white], Column: [yellow]%d ", len(db.GetNotes()), fromRow, fromColumn))
+			position.SetText(fmt.Sprintf("Note [yellow]#%d[white], Row: [yellow]%d[white], Column: [yellow]%d ", noteNum, fromRow, fromColumn))
 		} else {
 			position.SetText(fmt.Sprintf("[red]From[white] Row: [yellow]%d[white], Column: [yellow]%d[white] - [red]To[white] Row: [yellow]%d[white], To Column: [yellow]%d ", fromRow, fromColumn, toRow, toColumn))
 		}

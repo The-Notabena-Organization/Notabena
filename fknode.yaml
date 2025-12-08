@@ -3,9 +3,6 @@ destroy:
     - hard
   targets:
     - dist/
-    - out/
-    - build/
-    - .cache/
 buildCmd:
   - ~cd src && go build -o=../dist/notabena .
 launchCmd:
