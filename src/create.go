@@ -142,8 +142,7 @@ WHO CAUSED THIS???? Is this note doomed to live in yellow forever? The quick yel
 		return event
 	})
 
-	pages.AddAndSwitchToPage("main", mainView, true).AddPage("saved", tview.NewGrid().SetColumns(0, 64, 0).SetRows(0, 22, 0).AddItem(savedPopup, 1, 1, 1, 1, 0, 0, true), true, false)
-	pages.AddAndSwitchToPage("main", mainView, true).AddPage("md", tview.NewGrid().SetColumns(0, 64, 0).SetRows(0, 22, 0).AddItem(md, 1, 1, 1, 1, 0, 0, true), true, false)
+	pages.AddAndSwitchToPage("main", mainView, true).AddPage("saved", tview.NewGrid().SetColumns(0, 64, 0).SetRows(0, 22, 0).AddItem(savedPopup, 1, 1, 1, 1, 0, 0, true), true, false).AddPage("md", tview.NewGrid().SetColumns(0, 64, 0).SetRows(0, 22, 0).AddItem(md, 1, 1, 1, 1, 0, 0, true), true, false)
 	app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		switch event.Key() {
 		case tcell.KeyCtrlX:
@@ -161,14 +160,11 @@ WHO CAUSED THIS???? Is this note doomed to live in yellow forever? The quick yel
 				return nil
 			}
 			pages.ShowPage("saved")
-			return nil
 		case tcell.KeyCtrlQ:
 			app.Stop()
 			List(file, db)
-			return nil
 		case tcell.KeyF1:
 			pages.ShowPage("md")
-			return nil
 		}
 		return event
 	})
