@@ -12,8 +12,14 @@ import (
 
 func List(file *os.File, db DB) {
 	app := tview.NewApplication()
-	mainView := tview.NewTreeNode("Welcome to Notabena!").SetColor(tcell.ColorMediumPurple).SetSelectable(false)
+	mainView := tview.NewTreeNode("Welcome to Notabena!").SetColor(tcell.NewRGBColor(41, 76, 255)).SetSelectable(false)
 	noteTree := tview.NewTreeView().SetRoot(mainView).SetCurrentNode(mainView)
+	mainView.AddChild(
+		tview.NewTreeNode("Create a Note!").SetReference("NEW").SetColor(tcell.ColorBlue),
+	)
+	mainView.AddChild(
+		tview.NewTreeNode("Exit Notabena!").SetReference("EXT").SetColor(tcell.ColorRed),
+	)
 
 	for _, v := range db.GetNotes() {
 		stringId := strconv.FormatUint(uint64(v.Id), 10)
@@ -30,13 +36,6 @@ func List(file *os.File, db DB) {
 			tview.NewTreeNode("Delete").SetReference("DEL+" + stringId).SetColor(tcell.ColorRed),
 		)
 	}
-
-	mainView.AddChild(
-		tview.NewTreeNode("Create a Note!").SetReference("NEW").SetColor(tcell.ColorBlue),
-	)
-	mainView.AddChild(
-		tview.NewTreeNode("Exit Notabena!").SetReference("EXT").SetColor(tcell.ColorRed),
-	)
 
 	noteTree.SetSelectedFunc(func(node *tview.TreeNode) {
 		reference := node.GetReference()
