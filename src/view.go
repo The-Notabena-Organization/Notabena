@@ -15,14 +15,14 @@ func View(file *os.File, db DB, id uint32) {
 	note := db.GetNote(id)
 	textArea.SetText(note.Content)
 	textArea.SetTitle("Viewing " + note.Name).SetBorder(true)
-	info := tview.NewTextView().SetDynamicColors(true).SetText("[::r]^X[::-] Exit")
+	info := tview.NewTextView().SetDynamicColors(true).SetText("[::r]^Q[::-] Quit")
 	position := tview.NewTextView().SetDynamicColors(true).SetTextAlign(tview.AlignRight)
 	pages := tview.NewPages()
 	mainView := tview.NewGrid().SetRows(0, 1).AddItem(textArea, 0, 0, 1, 2, 0, 0, true).AddItem(info, 1, 0, 1, 1, 0, 0, false).AddItem(position, 1, 1, 1, 1, 0, 0, false)
 
 	pages.AddAndSwitchToPage("main", mainView, true)
 	app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
-		if event.Key() == tcell.KeyCtrlX {
+		if event.Key() == tcell.KeyCtrlQ {
 			app.Stop()
 			List(file, db)
 			return nil

@@ -10,6 +10,29 @@ import (
 	"github.com/rivo/tview"
 )
 
+func Shortcut(mode string, app *tview.Application, tree *tview.TreeView, file *os.File, db DB) {
+	node := tree.GetCurrentNode()
+	reference := node.GetReference()
+	if reference == "NEW" {
+		return
+	}
+	if reference == "EXT" {
+		return
+	}
+	num, ok := reference.(uint32)
+	if ok {
+		app.Stop()
+		switch mode {
+		case "create":
+			Create(file, db, 0)
+		case "edit":
+			Create(file, db, num)
+		case "view":
+			View(file, db, num)
+		}
+	}
+}
+
 func List(file *os.File, db DB) {
 	app := tview.NewApplication()
 	mainView := tview.NewTreeNode("Welcome to Notabena!").SetColor(tcell.NewRGBColor(41, 76, 255)).SetSelectable(false)
@@ -36,6 +59,18 @@ func List(file *os.File, db DB) {
 			tview.NewTreeNode("Delete").SetReference("DEL+" + stringId).SetColor(tcell.ColorRed),
 		)
 	}
+
+	noteTree.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+		switch event.Rune() {
+		case 'e', 'E':
+			Shortcut("edit", app, noteTree, file, db)
+		case 'v', 'V':
+			Shortcut("view", app, noteTree, file, db)
+		case 'c', 'C':
+			Shortcut("create", app, noteTree, file, db)
+		}
+		return event
+	})
 
 	noteTree.SetSelectedFunc(func(node *tview.TreeNode) {
 		reference := node.GetReference()

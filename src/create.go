@@ -30,7 +30,7 @@ func Create(file *os.File, db DB, edit uint32) {
 		textArea.SetTitle(fmt.Sprintf("New note [gray]#%d", noteNum)).SetBorder(true)
 	}
 
-	info := tview.NewTextView().SetDynamicColors(true).SetText("[::r]^X[::-] Save [::r]^Q[::-] Quit [::r]F1[::-] Help")
+	info := tview.NewTextView().SetDynamicColors(true).SetText("[::r]^S[::-] Save [::r]^Q[::-] Quit [::r]F1[::-] Help")
 	position := tview.NewTextView().SetDynamicColors(true).SetTextAlign(tview.AlignRight)
 	pages := tview.NewPages()
 	updateInfo := func() {
@@ -163,21 +163,6 @@ WHO CAUSED THIS???? Is this note doomed to live in yellow forever? The quick yel
 	pages.AddAndSwitchToPage("main", mainView, true).AddPage("saved", tview.NewGrid().SetColumns(0, 64, 0).SetRows(0, 22, 0).AddItem(savedPopup, 1, 1, 1, 1, 0, 0, true), true, false).AddPage("md", tview.NewGrid().SetColumns(0, 64, 0).SetRows(0, 22, 0).AddItem(md, 1, 1, 1, 1, 0, 0, true), true, false)
 	app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		switch event.Key() {
-		case tcell.KeyCtrlX:
-			if prevNote.Id != 0 {
-				app.Stop()
-				notes := []*Note{}
-				sqlscan.Select(context.Background(), db.Db, &notes, "SELECT id FROM saved_notes;")
-				note := Note{
-					Id:      prevNote.Id,
-					Name:    prevNote.Name,
-					Content: textArea.GetText(),
-					Created: prevNote.Created}
-				note.Save(file.Name())
-				List(file, db)
-				return nil
-			}
-			pages.ShowPage("saved")
 		case tcell.KeyCtrlS:
 			if prevNote.Id != 0 {
 				notes := []*Note{}
